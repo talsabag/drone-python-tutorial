@@ -1,5 +1,7 @@
 # Drone Seed Project : Python Tutorial
 
+i[![Build Status](https://ci.cloudlockng.com/api/badges/josebarn/drone-python-tutorial/status.svg)](https://ci.cloudlockng.com/josebarn/drone-python-tutorial)
+
 This project is nothing special, just simply and example REST Service written in `python`.
 
 This service is used as a seed project for creating a [drone CI/CD pipeline](https://drone.io).
