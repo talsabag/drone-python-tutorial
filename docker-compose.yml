@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+        - 6379:6379
+    depends_on:
+        - database
+
+  database:
+    container_name: "database"
+    image: postgres:9.6.4-alpine
+    ports:
+        - 5432:5432
+    environment:
+        POSTGRES_USER: username
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: test
+
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    command: /env/bin/simple-service runserver -h 0.0.0.0 -p 5000
+    ports:
+        - 5000:5000
+    links:
+        - database
+        - redis
+    depends_on:
+        - redis
+        - database
+
+    environment:
+        DEBUG: 'True'
+        SECRET_KEY: asdklfjeoja039rjdlkjfaoi3rdk
+        DATABASE_URL: 'postgres://username:password@database/test'
