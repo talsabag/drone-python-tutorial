@@ -38,6 +38,34 @@ pipeline:
         - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
         - DATABASE_URL=postgres://username:password@database/test
 
+  alembic-upgrade-test:
+    image: python:2.7-alpine
+    commands:
+      # Restore extras for container, the were lost...
+      # specifically need libpq.so.5: needed by /app/env/lib/python2.7/site-packages/psycopg2/_psycopg.so
+      - apk add --update python python-dev py-pip build-base postgresql-dev
+      - /app/env/bin/python ./service/run.py db upgrade
+    ports:
+        - 5000:5000
+    environment:
+        - DEBUG=True
+        - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
+        - DATABASE_URL=postgres://username:password@database/test
+
+  alembic-migrate-test:
+    image: python:2.7-alpine
+    commands:
+      # Restore extras for container, the were lost...
+      # specifically need libpq.so.5: needed by /app/env/lib/python2.7/site-packages/psycopg2/_psycopg.so
+      - apk add --update python python-dev py-pip build-base postgresql-dev
+      - /app/env/bin/python ./service/run.py db migrate
+    ports:
+        - 5000:5000
+    environment:
+        - DEBUG=True
+        - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
+        - DATABASE_URL=postgres://username:password@database/test
+
 services:
   database:
     image: postgres:9.6.4-alpine
