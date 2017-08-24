@@ -13,6 +13,7 @@ docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml up
 docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml up -d redis
 docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml up -d web
 docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml up sut
+
 # Stop the services
 docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml stop
 
