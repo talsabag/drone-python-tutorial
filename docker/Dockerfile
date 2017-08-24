@@ -1,13 +1,4 @@
-FROM python:2.7-alpine
-
-RUN apk add --update \
-    python \
-    python-dev \
-    py-pip \
-    build-base \
-    postgresql-dev \
-  && pip install virtualenv \
-  && rm -rf /var/cache/apk/*
+FROM josebarn/python-2.7-base:latest
 
 WORKDIR /app
 COPY . /app
