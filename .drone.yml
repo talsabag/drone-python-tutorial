@@ -50,14 +50,6 @@ pipeline:
         # Note database is replaces with the hostname of the database service
         - DATABASE_URL=postgres://username:password@database/test
 
-  integration-testing:
-    image: michalpodeszwa/docker-compose:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    commands:
-      - ./scripts/integration-test-runner.sh
-    debug: true
-
 ################################################################
 ## Services which are leveraged by the pipeline
 ################################################################
@@ -71,3 +63,10 @@ services:
 
   redis:
     image: redis:alpine
+
+  docker-custodian:
+    image: yelp/docker-custodian
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    command: [ dcgc, --max-image-age, 2days ]
