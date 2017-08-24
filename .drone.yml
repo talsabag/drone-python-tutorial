@@ -18,6 +18,7 @@ pipeline:
       # package and install
       - /app/env/bin/python setup.py bdist
       - /app/env/bin/python setup.py install
+      # All data is retained in the /app/env directory for all remaining steps
 
   functional-test:
     image: josebarn/python-2.7-base:latest
@@ -26,30 +27,44 @@ pipeline:
     environment:
         - DEBUG=True
         - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
+        # Note database is replaces with the hostname of the database service
         - DATABASE_URL=postgres://username:password@database/test
 
   alembic-upgrade-test:
     image: josebarn/python-2.7-base:latest
     commands:
-      - /app/env/bin/python service/run.py db upgrade
+      - /app/env/bin/python ./service/run.py db upgrade
     ports:
         - 5000:5000
     environment:
         - DEBUG=True
         - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
+        # Note database is replaces with the hostname of the database service
         - DATABASE_URL=postgres://username:password@database/test
 
   alembic-migrate-test:
     image: josebarn/python-2.7-base:latest
     commands:
-      - /app/env/bin/python service/run.py db migrate
+      - /app/env/bin/python ./service/run.py db migrate
     ports:
         - 5000:5000
     environment:
         - DEBUG=True
         - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
+        # Note database is replaces with the hostname of the database service
         - DATABASE_URL=postgres://username:password@database/test
 
+  integration-testing:
+    image: michalpodeszwa/docker-compose:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - ./scripts/integration-test-runner.sh
+    debug: true
+
+################################################################
+## Services which are leveraged by the pipeline
+################################################################
 services:
   database:
     image: postgres:9.6.4-alpine
