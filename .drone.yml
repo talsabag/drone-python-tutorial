@@ -34,8 +34,6 @@ pipeline:
     image: josebarn/python-2.7-base:latest
     commands:
       - /app/env/bin/python ./service/run.py db upgrade
-    ports:
-        - 5000:5000
     environment:
         - DEBUG=True
         - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
@@ -46,8 +44,6 @@ pipeline:
     image: josebarn/python-2.7-base:latest
     commands:
       - /app/env/bin/python ./service/run.py db migrate
-    ports:
-        - 5000:5000
     environment:
         - DEBUG=True
         - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
