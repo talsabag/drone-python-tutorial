@@ -1,4 +1,4 @@
-FROM josebarn/docker-python-2.7-base
+FROM josebarn/python-2.7-base:latest
 
 WORKDIR /app
 COPY . /app

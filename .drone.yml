@@ -6,7 +6,7 @@ workspace:
 pipeline:
   build:
     # Start with a small image
-    image: josebarn/docker-python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - virtualenv /app/env
       - /app/env/bin/pip install -r requirements.txt
@@ -20,7 +20,7 @@ pipeline:
       - /app/env/bin/python setup.py install
 
   functional-test:
-    image: josebarn/docker-python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - sleep 5
       - /app/env/bin/nosetests -v service/test/functional/tests.py
@@ -30,7 +30,7 @@ pipeline:
         - DATABASE_URL=postgres://username:password@database/test
 
   alembic-upgrade-test:
-    image: josebarn/docker-python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - sleep 5
       - /app/env/bin/python service/run.py db upgrade
@@ -42,7 +42,7 @@ pipeline:
         - DATABASE_URL=postgres://username:password@database/test
 
   alembic-migrate-test:
-    image: josebarn/docker-python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - sleep 5
       - /app/env/bin/python service/run.py db migrate
