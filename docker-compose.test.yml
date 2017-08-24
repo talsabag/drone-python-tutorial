@@ -20,7 +20,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
-    command: /bin/sh -c 'sleep 5; /env/bin/python /app/service/run.py db upgrade
+    command: /bin/sh -c 'sleep 5; /env/bin/python /app/service/run.py db upgrade'
     links:
       - web
     depends_on:
