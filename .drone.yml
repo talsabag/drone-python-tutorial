@@ -6,14 +6,9 @@ workspace:
 pipeline:
   build:
     # Start with a small image
-    image: python:2.7-alpine
+    image: josebarn/docker-python-2.7-base:latest
     commands:
-      # Add some extra support for postgres
-      - apk add --update python python-dev py-pip build-base postgresql-dev
-      - pip install virtualenv
-      # make a virtual eng for installing out binary
       - virtualenv /app/env
-      - rm -rf /var/cache/apk/*
       - /app/env/bin/pip install -r requirements.txt
       - /app/env/bin/pip install --upgrade pip setuptools wheel
       - /app/env/bin/pip wheel -r requirements.txt --wheel-dir=wheeldir --find-links=wheeldir
@@ -25,13 +20,9 @@ pipeline:
       - /app/env/bin/python setup.py install
 
   functional-test:
-    image: python:2.7-alpine
+    image: josebarn/docker-python-2.7-base:latest
     commands:
-      # Restore extras for container, the were lost...
-      # specifically need libpq.so.5: needed by /app/env/lib/python2.7/site-packages/psycopg2/_psycopg.so
-      - apk add --update python python-dev py-pip build-base postgresql-dev
-      # Give Postgres DB a moment to startup
-      # - sleep 5
+      - sleep 5
       - /app/env/bin/nosetests -v service/test/functional/tests.py
     environment:
         - DEBUG=True
@@ -39,11 +30,9 @@ pipeline:
         - DATABASE_URL=postgres://username:password@database/test
 
   alembic-upgrade-test:
-    image: python:2.7-alpine
+    image: josebarn/docker-python-2.7-base:latest
     commands:
-      # Restore extras for container, the were lost...
-      # specifically need libpq.so.5: needed by /app/env/lib/python2.7/site-packages/psycopg2/_psycopg.so
-      - apk add --update python python-dev py-pip build-base postgresql-dev
+      - sleep 5
       - /app/env/bin/python service/run.py db upgrade
     ports:
         - 5000:5000
@@ -53,11 +42,9 @@ pipeline:
         - DATABASE_URL=postgres://username:password@database/test
 
   alembic-migrate-test:
-    image: python:2.7-alpine
+    image: josebarn/docker-python-2.7-base:latest
     commands:
-      # Restore extras for container, the were lost...
-      # specifically need libpq.so.5: needed by /app/env/lib/python2.7/site-packages/psycopg2/_psycopg.so
-      - apk add --update python python-dev py-pip build-base postgresql-dev
+      - sleep 5
       - /app/env/bin/python service/run.py db migrate
     ports:
         - 5000:5000
