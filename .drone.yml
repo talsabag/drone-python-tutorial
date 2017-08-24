@@ -22,7 +22,6 @@ pipeline:
   functional-test:
     image: josebarn/python-2.7-base:latest
     commands:
-      - sleep 5
       - /app/env/bin/nosetests -v service/test/functional/tests.py
     environment:
         - DEBUG=True
@@ -32,7 +31,6 @@ pipeline:
   alembic-upgrade-test:
     image: josebarn/python-2.7-base:latest
     commands:
-      - sleep 5
       - /app/env/bin/python service/run.py db upgrade
     ports:
         - 5000:5000
@@ -44,7 +42,6 @@ pipeline:
   alembic-migrate-test:
     image: josebarn/python-2.7-base:latest
     commands:
-      - sleep 5
       - /app/env/bin/python service/run.py db migrate
     ports:
         - 5000:5000
