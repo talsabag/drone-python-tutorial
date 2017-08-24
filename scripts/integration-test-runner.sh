@@ -12,7 +12,7 @@ docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml bu
 docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml up -d database
 docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml up -d redis
 docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml up -d web
-docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml up sut
+docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml run sut
 
 # Stop the services
 docker-compose -p ci --file docker-compose.yml --file docker-compose.test.yml stop
