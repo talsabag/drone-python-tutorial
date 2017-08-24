@@ -6,11 +6,8 @@ workspace:
 pipeline:
   build:
     # Start with a small image
-    image: python:2.7-alpine
+    image: josebarn/python-2.7-base:latest
     commands:
-      # Add some extra support for postgres
-      - apk add --update python python-dev py-pip build-base postgresql-dev
-      - pip install virtualenv
       # make a virtual eng for installing out binary
       - virtualenv /app/env
       - rm -rf /var/cache/apk/*
