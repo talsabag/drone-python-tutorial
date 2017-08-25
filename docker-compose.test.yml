@@ -11,15 +11,16 @@ services:
     depends_on:
       - migrate
     environment:
+      # Web is coming from the primary docker-compose file
       SERVER_URL: http://web:5000
       SECRET_KEY: asdklfjeoja039rjdlkjfaoi3rdk
       DATABASE_URL: postgres://username:password@database/test
-      
+
   upgrade:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
-    command: /bin/sh -c 'sleep 5; /env/bin/nosetests -v /app/service/test/integration/tests.py'
+    command: /bin/sh -c 'sleep 5; /env/bin/python /app/service/run.py db upgrade'
     links:
       - web
     depends_on:
@@ -28,12 +29,12 @@ services:
       SERVER_URL: http://web:5000
       SECRET_KEY: asdklfjeoja039rjdlkjfaoi3rdk
       DATABASE_URL: postgres://username:password@database/test
-      
+
   migrate:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
-    command: /bin/sh -c 'sleep 5; /env/bin/nosetests -v /app/service/test/integration/tests.py'
+    command: /env/bin/python /app/service/run.py db migrate
     links:
       - web
     depends_on:
@@ -42,4 +43,3 @@ services:
       SERVER_URL: http://web:5000
       SECRET_KEY: asdklfjeoja039rjdlkjfaoi3rdk
       DATABASE_URL: postgres://username:password@database/test
-
