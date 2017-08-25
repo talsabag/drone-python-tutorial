@@ -71,10 +71,9 @@ pipeline:
         - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
         # Note database is replaces with the hostname of the database service
         - DATABASE_URL=postgres://username:password@database/test
+        # Note sut is the service instance started in a standalone container in
+        # the previous step
         - SERVER_URL=http://sut:5000
-
-
-
 
 ################################################################
 ## Services which are leveraged by the pipeline
