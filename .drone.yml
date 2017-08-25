@@ -89,10 +89,10 @@ pipeline:
       event: [push]
       branch:
         # only on release branch
-        include: [ master, release/* ]
+        include: [ master, release, release/* ]
         # Just for completeness we could limit using something like the following - but no need
         #exclude: [ testing/*, feature/* ]
-      
+
 ################################################################
 ## Services which are leveraged by the pipeline
 ################################################################
