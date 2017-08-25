@@ -83,7 +83,16 @@ pipeline:
     tags:
       - latest
     secrets: [ECR_ACCESS_KEY, ECR_SECRET_KEY]
-
+    when:
+      # Only publish on a push
+      # Execute the event for optional [push, pull_request, tag, deployment]
+      event: [push]
+      branch:
+        # only on release branch
+        include: [ master, release/* ]
+        # Just for completeness we could limit using something like the following - but no need
+        #exclude: [ testing/*, feature/* ]
+      
 ################################################################
 ## Services which are leveraged by the pipeline
 ################################################################
