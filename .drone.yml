@@ -50,6 +50,31 @@ pipeline:
         # Note database is replaces with the hostname of the database service
         - DATABASE_URL=postgres://username:password@database/test
 
+  sut:
+    image: josebarn/python-2.7-base:latest
+    commands:
+      - /app/env/bin/simple-service runserver -h 0.0.0.0 -p 5000
+    environment:
+        - DEBUG=True
+        - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
+        # Note database is replaces with the hostname of the database service
+        - DATABASE_URL=postgres://username:password@database/test
+    detach: true
+
+  integration-test:
+    image: josebarn/python-2.7-base:latest
+    commands:
+      - /app/env/bin/nosetests -v service/test/integration/tests.py
+    environment:
+        - DEBUG=True
+        - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
+        # Note database is replaces with the hostname of the database service
+        - DATABASE_URL=postgres://username:password@database/test
+        - SERVER_URL=http://sut:5000
+
+
+
+
 ################################################################
 ## Services which are leveraged by the pipeline
 ################################################################
