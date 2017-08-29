@@ -6,7 +6,7 @@ workspace:
 pipeline:
   build:
     # Start with a small image
-    image: talsabag/python-2.7-base:latest
+    image: josebarn/python-2.7-base:latest
     commands:
       - virtualenv /app/env
       - /app/env/bin/pip install -r requirements.txt
