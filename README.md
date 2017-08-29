@@ -1,6 +1,6 @@
 # Drone Seed Project : Python Tutorial
 
-[![Build Status](https://ci.cloudlockng.com/api/badges/josebarn/drone-python-tutorial/status.svg)](https://ci.cloudlockng.com/josebarn/drone-python-tutorial)
+[![Build Status](https://ci.cloudlockng.com/api/badges/talsabag/drone-python-tutorial/status.svg)](https://ci.cloudlockng.com/talsabag/drone-python-tutorial)
 
 This project is nothing special, just simply and example REST Service written in `python`.
 
