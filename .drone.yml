@@ -1,12 +1,12 @@
 # Create a shared workspace for us to pass data from step to step
 workspace:
   base: /app
-  path: src/github.com/josebarn/drone-python-tutorial
+  path: src/github.com/talsabag/drone-python-tutorial
 
 pipeline:
   build:
     # Start with a small image
-    image: josebarn/python-2.7-base:latest
+    image: talsabag/python-2.7-base:latest
     commands:
       - virtualenv /app/env
       - /app/env/bin/pip install -r requirements.txt
@@ -18,91 +18,3 @@ pipeline:
       # package and install
       - /app/env/bin/python setup.py bdist
       - /app/env/bin/python setup.py install
-      # All data is retained in the /app/env directory for all remaining steps
-
-  functional-test:
-    image: josebarn/python-2.7-base:latest
-    commands:
-      - /app/env/bin/nosetests -v service/test/functional/tests.py
-    environment:
-        - DEBUG=True
-        - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
-        # Note database is replaces with the hostname of the database service
-        - DATABASE_URL=postgres://username:password@database/test
-
-  alembic-upgrade-test:
-    image: josebarn/python-2.7-base:latest
-    commands:
-      - /app/env/bin/python ./service/run.py db upgrade
-    environment:
-        - DEBUG=True
-        - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
-        # Note database is replaces with the hostname of the database service
-        - DATABASE_URL=postgres://username:password@database/test
-
-  alembic-migrate-test:
-    image: josebarn/python-2.7-base:latest
-    commands:
-      - /app/env/bin/python ./service/run.py db migrate
-    environment:
-        - DEBUG=True
-        - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
-        # Note database is replaces with the hostname of the database service
-        - DATABASE_URL=postgres://username:password@database/test
-
-  sut:
-    image: josebarn/python-2.7-base:latest
-    commands:
-      - /app/env/bin/simple-service runserver -h 0.0.0.0 -p 5000
-    environment:
-        - DEBUG=True
-        - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
-        # Note database is replaces with the hostname of the database service
-        - DATABASE_URL=postgres://username:password@database/test
-    detach: true
-
-  integration-test:
-    image: josebarn/python-2.7-base:latest
-    commands:
-      - sleep 3
-      - /app/env/bin/nosetests -v service/test/integration/tests.py
-    environment:
-        - DEBUG=True
-        - SECRET_KEY=asdklfjeoja039rjdlkjfaoi3rdk
-        # Note database is replaces with the hostname of the database service
-        - DATABASE_URL=postgres://username:password@database/test
-        # Note sut is the service instance started in a standalone container in
-        # the previous step
-        - SERVER_URL=http://sut:5000
-
-  publish-to-esr:
-    image: plugins/ecr
-    repo: 995121555896.dkr.ecr.us-east-1.amazonaws.com/drone-python-test
-    registry: 995121555896.dkr.ecr.us-east-1.amazonaws.com
-    dockerfile: ./docker/Dockerfile
-    tags:
-      - latest
-    secrets: [ECR_ACCESS_KEY, ECR_SECRET_KEY]
-    when:
-      # Only publish on a push
-      # Execute the event for optional [push, pull_request, tag, deployment]
-      event: [push]
-      branch:
-        # only on release branch
-        include: [ master, release, release/* ]
-        # Just for completeness we could limit using something like the following - but no need
-        #exclude: [ testing/*, feature/* ]
-
-################################################################
-## Services which are leveraged by the pipeline
-################################################################
-services:
-  database:
-    image: postgres:9.6.4-alpine
-    environment:
-        - POSTGRES_USER=username
-        - POSTGRES_PASSWORD=password
-        - POSTGRES_DB=test
-
-  redis:
-    image: redis:alpine
